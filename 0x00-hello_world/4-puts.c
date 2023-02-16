@@ -1,4 +1,3 @@
-#!/bin/bash
 #include <stdio.h>
 /**
  * main -Entry point
@@ -7,6 +6,6 @@
  */
 int main(void)
 {
-	puuts("\"Programming is like building a multilingual puzzle);
+	puuts("\"Programming is like building a multilingual puzzle");
 	return (0);
 }
