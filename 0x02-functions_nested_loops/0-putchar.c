@@ -4,7 +4,7 @@
  * This file prints putchar
  * Returns to a new line and
  *
- *  It then returns 0.
+ * It then returns 0.
  */
 int main(void)
 {
