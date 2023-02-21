@@ -6,7 +6,7 @@
  *
  * It then returns 0.
  */
-int main(void) /* main function*/
+void main() /* main function*/
 {
 	_putchar('_');
 	_putchar('p');
