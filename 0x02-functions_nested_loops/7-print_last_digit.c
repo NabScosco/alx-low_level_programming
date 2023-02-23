@@ -1,17 +1,22 @@
 #include "main.h"
+
 /**
- * print_last_digit - Printing the last digit of a mumber
- * Return: Always i.
- * @a: Receives inputs
+ * print_last_digit - This function prints the last digit of an interger.
+ * @a: This holds the value
+ *
+ * Return: Returns the last digit of n
  */
 
-int print_last_digit(int a);
+int print_last_digit(int a)
 {
-	int i;
+	int n;
 
-	i = a % 10;
-
-	putchar(i);
-	putchar('\n');
-	return (i);
+	n = a % 10;
+	if (n < 0)
+	{
+		n = n * -1;
+	}
+	_putchar(n + '0');
+	return (n);
 }
+
