@@ -35,5 +35,5 @@ void print_strings(const char *separator, const unsigned int n, ...)
 
 int main()
 {
-	print_strings()
+	print_strings();
 }
