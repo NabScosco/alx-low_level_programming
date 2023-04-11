@@ -1,70 +1,36 @@
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdlib.h>
 #include "main.h"
 
-#define BUFFER_SIZE 1024
-
 /**
- * error_exit - prints an error message and exits with a given code
- * @code: the exit code
- * @message: the error message
+ * main - entry point function
+ * @argc: argument count
+ * @argv: argument vector
+ * Return: 0 on success, otherwise error code
  */
-
-void error_exit(int code, char *message)
+int main(int argc, char *argv[])
 {
-	dprintf(STDERR_FILENO, "%s\n", message);
-	exit(code);
-}
-
-/**
- * main - entry point of the program
- * @argc: the number of arguments
- * @argv: the array of arguments
- * Return: 0 on success, 97-100 on error
- */
-
-int main(int argc, char **argv)
-{
-	int source_fd, dest_fd, bytes_read, bytes_written;
-	char buffer[BUFFER_SIZE];
+	int fd_from, fd_to, r = 0, w = 0;
+	char buf[1024];
 
 	if (argc != 3)
-		error_exit(97, "Usage: cp file_from file_to");
-
-	source_fd = open(argv[1], O_RDONLY);
-	if (source_fd == -1)
-		error_exit(98, "Error: Can't read from file %s", argv[1]);
-
-	dest_fd = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (dest_fd == -1)
+		return (dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n"), 97);
+	fd_from = open(argv[1], O_RDONLY);
+	if (fd_from < 0)
+		return (dprintf(STDERR_FILENO, "Error: Can't read %s\n", argv[1]), 98);
+	fd_to = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, 0664);
+	if (fd_to < 0)
+		return (dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]), 99);
+	while ((r = read(fd_from, buf, 1024)) > 0)
 	{
-		close(source_fd);
-		error_exit(99, "Error: Can't write to %s", argv[2]);
+		w = write(fd_to, buf, r);
+		if (w < r)
+			return (dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]), 99);
 	}
-
-	while ((bytes_read = read(source_fd, buffer, BUFFER_SIZE)) > 0)
-	{
-		bytes_written = write(dest_fd, buffer, bytes_read);
-		if (bytes_written != bytes_read)
-		{
-			close(source_fd);
-			close(dest_fd);
-			error_exit(99, "Error: Can't write to %s", argv[2]);
-		}
-	}
-
-	if (bytes_read == -1)
-	{
-		close(source_fd);
-		close(dest_fd);
-		error_exit(98, "Error: Can't read from file %s", argv[1]);
-	}
-
-	if (close(source_fd) == -1)
-		error_exit(100, "Error: Can't close fd %d", source_fd);
-
-	if (close(dest_fd) == -1)
-		error_exit(100, "Error: Can't close fd %d", dest_fd);
+	if (r < 0)
+		return (dprintf(STDERR_FILENO, "Error: Can't read %s\n", argv[1]), 98);
+	if (close(fd_from) < 0)
+		return (dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd_from), 100);
+	if (close(fd_to) < 0)
+		return (dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd_to), 100);
 	return (0);
 }
+
