@@ -2,11 +2,13 @@
 #define LISTS_H
 
 /**
- * struct dlistint_s - Doubly linked list node structure
+ * struct dlistint_s - doubly linked list
+ * @n: integer
+ * @prev: points to the previous node
+ * @next: points to the next node
  *
- * @n: Integer value stored in the node
- * @prev: Pointer to the previous node in the list
- * @next: Pointer to the next node in the list
+ * Description: doubly linked list node structure
+ *
  */
 typedef struct dlistint_s
 {
